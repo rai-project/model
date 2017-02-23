@@ -1,11 +1,7 @@
 package model
 
-import (
-	"gopkg.in/mgo.v2/bson"
-)
-
 type Job struct {
-	ID       bson.ObjectId `json:"id" bson:"_id,omitempty"`
-	User     *User         `json:"user"`
-	Commands []byte        `json:"commands"`
+	Base
+	User     *User  `json:"user" gorm:"ForeignKey:UserID;AssociationForeignKey:Refer"`
+	Commands []byte `json:"commands"`
 }
