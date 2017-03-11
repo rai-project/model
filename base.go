@@ -3,8 +3,8 @@ package model
 import "time"
 
 type Base struct {
-	ID        uint       `json:"id" gorm:"primary_key"`
-	CreatedAt time.Time  `json:"created_at"`
-	UpdatedAt time.Time  `json:"created_at"`
-	DeletedAt *time.Time `json:"deleted_at" sql:"index"`
+	ID        string     `json:"id" gorm:"primary_key" toml:"id,omitempty"`
+	CreatedAt time.Time  `json:"created_at" toml:"created_at,omitempty"`
+	UpdatedAt time.Time  `json:"updated_at" toml:"updated_at,omitempty"`
+	DeletedAt *time.Time `json:"deleted_at" sql:"index" toml:"deleted_at,omitempty"`
 }
