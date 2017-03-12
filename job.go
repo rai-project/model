@@ -18,3 +18,17 @@ type BuildSpecification struct {
 		Build []string `json:"build" yaml:"build"`
 	} `json:"commands" yaml:"commands"`
 }
+
+type ResponseKind string
+
+const (
+	StderrResponse ResponseKind = "Stderr"
+	StdoutResponse ResponseKind = "Stdout"
+	StdinResponse  ResponseKind = "Stdin"
+	EndResponse    ResponseKind = "End"
+)
+
+type JobResponse struct {
+	Kind ResponseKind `json:"kind"`
+	Body []byte       `json:"body"`
+}
