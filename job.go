@@ -1,7 +1,10 @@
 package model
 
+import "time"
+
 type JobRequest struct {
 	Base
+	UploadKey          string             `json:"upload_key"`
 	User               User               `json:"user" gorm:"ForeignKey:UserID;AssociationForeignKey:Refer"`
 	BuildSpecification BuildSpecification `json:"build_specification"`
 }
@@ -29,6 +32,7 @@ const (
 )
 
 type JobResponse struct {
-	Kind ResponseKind `json:"kind"`
-	Body []byte       `json:"body"`
+	Kind      ResponseKind `json:"kind"`
+	Body      []byte       `json:"body"`
+	CreatedAt time.Time    `json:"created_at"`
 }
