@@ -14,12 +14,14 @@ type BuildSpecification struct {
 		Version        string `json:"version" yaml:"version"`
 		ContainerImage string `json:"image" yaml:"image"`
 	} `json:"rai" yaml:"rai"`
-	Resources struct {
-		GPUs int `json:"gpus" yaml:"gpus"`
-	} `json:"resources" yaml:"resources"`
-	Commands struct {
+	Resources Resources `json:"resources" yaml:"resources"`
+	Commands  struct {
 		Build []string `json:"build" yaml:"build"`
 	} `json:"commands" yaml:"commands"`
+}
+
+type Resources struct {
+	GPUs int `json:"gpus" yaml:"gpus"`
 }
 
 type ResponseKind string
