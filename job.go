@@ -21,7 +21,18 @@ type BuildSpecification struct {
 }
 
 type Resources struct {
-	GPUs int `json:"gpus" yaml:"gpus"`
+	CPU CPUResources `json:"cpu" yaml:"cpu"`
+	GPU GPUResources `json:"gpu" yaml:"gpu"`
+}
+
+type CPUResources struct {
+	Architecture string `json:"architecture" yaml:"architecture"`
+}
+
+type GPUResources struct {
+	Architecture string `json:"architecture" yaml:"architecture"`
+	Count        int    `json:"count" yaml:"count"`
+	Memory       int64  `json:"memory" yaml:"memory"`
 }
 
 type ResponseKind string
