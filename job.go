@@ -21,8 +21,9 @@ type BuildSpecification struct {
 }
 
 type Resources struct {
-	CPU CPUResources `json:"cpu" yaml:"cpu"`
-	GPU GPUResources `json:"gpu" yaml:"gpu"`
+	CPU     CPUResources `json:"cpu" yaml:"cpu"`
+	GPU     GPUResources `json:"gpu" yaml:"gpu"`
+	Network bool         `json:"network" yaml:"network"`
 }
 
 type CPUResources struct {
