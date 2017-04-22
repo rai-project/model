@@ -9,6 +9,16 @@ type JobRequest struct {
 	BuildSpecification BuildSpecification `json:"build_specification"`
 }
 
+type BuildCommands []string
+
+type BuildImageSpecification struct {
+	Title            string `json:"title" yaml:"title"`
+	Type             string `json:"type" yaml:"type"`
+	ImageName        string `json:"image_name" yaml:"image_name"`
+	WorkingDirectory string `json:"working_directory" yaml:"working_directory"`
+	Dockerfile       string `json:"dockerfile" yaml:"dockerfile"`
+}
+
 type BuildSpecification struct {
 	RAI struct {
 		Version        string `json:"version" yaml:"version"`
@@ -16,7 +26,8 @@ type BuildSpecification struct {
 	} `json:"rai" yaml:"rai"`
 	Resources Resources `json:"resources" yaml:"resources"`
 	Commands  struct {
-		Build []string `json:"build" yaml:"build"`
+		BuildImage *BuildImageSpecification `json:"build_image,omitempty" yaml:"build_image,omitempty"`
+		Build      BuildCommands            `json:"build" yaml:"build"`
 	} `json:"commands" yaml:"commands"`
 }
 
