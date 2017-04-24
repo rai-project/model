@@ -12,11 +12,9 @@ type JobRequest struct {
 type BuildCommands []string
 
 type BuildImageSpecification struct {
-	Title            string `json:"title" yaml:"title"`
-	Type             string `json:"type" yaml:"type"`
-	ImageName        string `json:"image_name" yaml:"image_name"`
-	WorkingDirectory string `json:"working_directory" yaml:"working_directory"`
-	Dockerfile       string `json:"dockerfile" yaml:"dockerfile"`
+	ImageName  string `json:"image_name" yaml:"image_name"`
+	Dockerfile string `json:"dockerfile" yaml:"dockerfile"`
+	NoCache    bool   `json:"no_cache" yaml:"no_cache"`
 }
 
 type BuildSpecification struct {
@@ -32,9 +30,9 @@ type BuildSpecification struct {
 }
 
 type Resources struct {
-	CPU     CPUResources `json:"cpu" yaml:"cpu"`
-	GPU     GPUResources `json:"gpu" yaml:"gpu"`
-	Network bool         `json:"network" yaml:"network"`
+	CPU     CPUResources  `json:"cpu" yaml:"cpu"`
+	GPU     *GPUResources `json:"gpu" yaml:"gpu"`
+	Network bool          `json:"network" yaml:"network"`
 }
 
 type CPUResources struct {
@@ -57,6 +55,7 @@ const (
 )
 
 type JobResponse struct {
+	ID        string       `json:"id"`
 	Kind      ResponseKind `json:"kind"`
 	Body      []byte       `json:"body"`
 	CreatedAt time.Time    `json:"created_at"`
