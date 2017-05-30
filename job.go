@@ -17,16 +17,20 @@ type BuildImageSpecification struct {
 	NoCache    bool   `json:"no_cache" yaml:"no_cache"`
 }
 
+type RAIBuildSpecification struct {
+	Version        string `json:"version" yaml:"version"`
+	ContainerImage string `json:"image" yaml:"image"`
+}
+
+type CommandsBuildSpecification struct {
+	BuildImage *BuildImageSpecification `json:"build_image,omitempty" yaml:"build_image,omitempty"`
+	Build      BuildCommands            `json:"build" yaml:"build"`
+}
+
 type BuildSpecification struct {
-	RAI struct {
-		Version        string `json:"version" yaml:"version"`
-		ContainerImage string `json:"image" yaml:"image"`
-	} `json:"rai" yaml:"rai"`
-	Resources Resources `json:"resources" yaml:"resources"`
-	Commands  struct {
-		BuildImage *BuildImageSpecification `json:"build_image,omitempty" yaml:"build_image,omitempty"`
-		Build      BuildCommands            `json:"build" yaml:"build"`
-	} `json:"commands" yaml:"commands"`
+	RAI       RAIBuildSpecification      `json:"rai" yaml:"rai"`
+	Resources Resources                  `json:"resources" yaml:"resources"`
+	Commands  CommandsBuildSpecification `json:"commands" yaml:"commands"`
 }
 
 type Resources struct {
