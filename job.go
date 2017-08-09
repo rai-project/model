@@ -18,17 +18,18 @@ type Credentials struct {
 	Password string `json:"password" yaml:"password"`
 }
 
-type Publish struct {
+type Push struct {
+	Push        bool        `json:"push" yaml:"push"`
 	ImageName   string      `json:"image_name" yaml:"image_name"`
 	Registry    string      `json:"registry" yaml:"registry"`
 	Credentials Credentials `json:"credentials" yaml:"credentials"`
 }
 
 type BuildImageSpecification struct {
-	ImageName  string   `json:"image_name" yaml:"image_name"`
-	Dockerfile string   `json:"dockerfile" yaml:"dockerfile"`
-	Publish    *Publish `json:"publish" yaml:"publish"`
-	NoCache    bool     `json:"no_cache" yaml:"no_cache"`
+	ImageName  string `json:"image_name" yaml:"image_name"`
+	Dockerfile string `json:"dockerfile" yaml:"dockerfile"`
+	Push       *Push  `json:"push" yaml:"push"`
+	NoCache    bool   `json:"no_cache" yaml:"no_cache"`
 }
 
 type RAIBuildSpecification struct {
@@ -79,16 +80,22 @@ type JobResponse struct {
 	CreatedAt time.Time    `json:"created_at"`
 }
 
-func (j *JobRequest) PublishQ() bool {
+func (j *JobRequest) PushQ() bool {
 	buildImage := j.BuildSpecification.Commands.BuildImage
 	if buildImage == nil {
 		return false
 	}
-	publish := buildImage.Publish
-	if publish == nil {
+	push := buildImage.Push
+	if push == nil {
 		return false
 	}
-	if publish.Credentials.Username == "" && publish.Credentials.Password == "" {
+	if push.Push == false {
+		return false
+	}
+	if push.Credentials.Username == "" {
+		return false
+	}
+	if push.Credentials.Password == "" {
 		return false
 	}
 	return true
