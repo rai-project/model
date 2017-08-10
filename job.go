@@ -80,12 +80,11 @@ type JobResponse struct {
 	CreatedAt time.Time    `json:"created_at"`
 }
 
-func (j *JobRequest) PushQ() bool {
-	buildImage := j.BuildSpecification.Commands.BuildImage
-	if buildImage == nil {
+func (b *BuildImageSpecification) PushQ() bool {
+	if b == nil {
 		return false
 	}
-	push := buildImage.Push
+	push := b.Push
 	if push == nil {
 		return false
 	}
@@ -99,4 +98,9 @@ func (j *JobRequest) PushQ() bool {
 		return false
 	}
 	return true
+}
+
+func (j *JobRequest) PushQ() bool {
+	buildImage := j.BuildSpecification.Commands.BuildImage
+	return buildImage.PushQ()
 }
