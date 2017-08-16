@@ -11,4 +11,5 @@ type User struct {
 	Affiliation string `json:"affiliation" yaml:"affiliation" toml:"affiliation"`
 	Password    string `json:"password" yaml:"-" toml:"-"`
 	// Team      *Team  `json:"team" gorm:"ForeignKey:TeamID;AssociationForeignKey:Refer" toml:"-"`
+	DockerHub *Credentials `json:"dockerhub,omitempty" yaml:"dockerhub,omitempty" toml:"dockerhub,omitempty"`
 }

@@ -1,6 +1,7 @@
 package model
 
 import (
+	"strings"
 	"time"
 )
 
@@ -12,11 +13,6 @@ type JobRequest struct {
 }
 
 type BuildCommands []string
-
-type Credentials struct {
-	Username string `json:"user_name" yaml:"user_name"`
-	Password string `json:"password" yaml:"password"`
-}
 
 type Push struct {
 	Push        bool        `json:"push" yaml:"push"`
@@ -88,13 +84,13 @@ func (b *BuildImageSpecification) PushQ() bool {
 	if push == nil {
 		return false
 	}
-	if push.Push == false {
+	if !push.Push {
 		return false
 	}
-	if push.Credentials.Username == "" {
+	if strings.TrimSpace(push.Credentials.Username) == "" {
 		return false
 	}
-	if push.Credentials.Password == "" {
+	if strings.TrimSpace(push.Credentials.Password) == "" {
 		return false
 	}
 	return true
@@ -102,5 +98,5 @@ func (b *BuildImageSpecification) PushQ() bool {
 
 func (j *JobRequest) PushQ() bool {
 	buildImage := j.BuildSpecification.Commands.BuildImage
-	return buildImage.PushQ()
+	return buildImage != nil && buildImage.PushQ()
 }
