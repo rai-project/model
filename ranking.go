@@ -5,11 +5,13 @@ import (
 	"time"
 
 	"github.com/docker/docker/pkg/namesgenerator"
+	"gopkg.in/mgo.v2/bson"
 )
 
 // Ranking holds info used to track team rankings
 type Ranking struct {
-	Base
+	ID         bson.ObjectId `json:"id" bson:"_id"`
+	CreatedAt  time.Time     `json:"created_at"  bson:"created_at"`
 	Username   string
 	Teamname   string
 	ProjectURL string // where the file was uploaded
