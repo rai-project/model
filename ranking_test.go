@@ -38,7 +38,7 @@ func TestInsertRanking(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotEmpty(t, tbl)
 
-	tbl.Create(nil)
+	// tbl.Create(nil)
 
 	err = tbl.Insert(Ranking{
 		ID:        bson.NewObjectId(),
