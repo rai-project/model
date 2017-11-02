@@ -29,11 +29,12 @@ func (r Ranking) Anonymize() Ranking {
 // Fa2017Ece408Ranking holds fields specific to ECE408
 type Fa2017Ece408Ranking struct {
 	Ranking
-	BatchSize         int
-	Correctness       float64
-	OpRuntime         time.Duration // runtime reported by the layer
-	UserFullRuntime   time.Duration // runtime captured using time
-	SystemFullRuntime time.Duration // full runtime captures using time
+	BatchSize          int
+	Correctness        float64
+	OpRuntime          time.Duration // runtime reported by the layer
+	UserFullRuntime    time.Duration // user from /usr/bin/time
+	SystemFullRuntime  time.Duration // system from /usr/bin/time
+	ElapsedFullRuntime time.Duration // elapsed from /usr/bin/time
 }
 
 type Fa2017Ece408Rankings []Fa2017Ece408Ranking
