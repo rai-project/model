@@ -39,3 +39,29 @@ type Fa2017Ece408Ranking struct {
 }
 
 type Fa2017Ece408Rankings []Fa2017Ece408Ranking
+
+// ByOpRuntime allows sorting Fa2017Ece408Rankings by OpRuntime
+type ByOpRuntime []Fa2017Ece408Ranking
+type ByUserFullRuntime []Fa2017Ece408Ranking
+type BySystemFullRuntime []Fa2017Ece408Ranking
+type ByElapsedFullRuntime []Fa2017Ece408Ranking
+
+func (r ByOpRuntime) Len() int           { return len(r) }
+func (r ByOpRuntime) Swap(i, j int)      { r[i], r[j] = r[j], r[i] }
+func (r ByOpRuntime) Less(i, j int) bool { return r[i].OpRuntime < r[j].OpRuntime }
+
+func (r ByUserFullRuntime) Len() int           { return len(r) }
+func (r ByUserFullRuntime) Swap(i, j int)      { r[i], r[j] = r[j], r[i] }
+func (r ByUserFullRuntime) Less(i, j int) bool { return r[i].UserFullRuntime < r[j].UserFullRuntime }
+
+func (r BySystemFullRuntime) Len() int      { return len(r) }
+func (r BySystemFullRuntime) Swap(i, j int) { r[i], r[j] = r[j], r[i] }
+func (r BySystemFullRuntime) Less(i, j int) bool {
+	return r[i].SystemFullRuntime < r[j].SystemFullRuntime
+}
+
+func (r ByElapsedFullRuntime) Len() int      { return len(r) }
+func (r ByElapsedFullRuntime) Swap(i, j int) { r[i], r[j] = r[j], r[i] }
+func (r ByElapsedFullRuntime) Less(i, j int) bool {
+	return r[i].ElapsedFullRuntime < r[j].ElapsedFullRuntime
+}
