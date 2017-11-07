@@ -9,10 +9,11 @@ import (
 
 // Ranking holds info used to track team rankings
 type Ranking struct {
-	CreatedAt  time.Time `json:"created_at"  bson:"created_at"`
-	Username   string
-	Teamname   string
-	ProjectURL string // where the file was uploaded
+	CreatedAt    time.Time `json:"created_at"  bson:"created_at"`
+	Username     string
+	Teamname     string
+	ProjectURL   string // where the file was uploaded
+	IsSubmission bool   // is a final submission
 }
 
 // Anonymize produces an anonymous Ranking
