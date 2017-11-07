@@ -5,13 +5,11 @@ import (
 	"time"
 
 	"github.com/docker/docker/pkg/namesgenerator"
-	"gopkg.in/mgo.v2/bson"
 )
 
 // Ranking holds info used to track team rankings
 type Ranking struct {
-	ID         bson.ObjectId `json:"id" bson:"_id"`
-	CreatedAt  time.Time     `json:"created_at"  bson:"created_at"`
+	CreatedAt  time.Time `json:"created_at"  bson:"created_at"`
 	Username   string
 	Teamname   string
 	ProjectURL string // where the file was uploaded
@@ -28,7 +26,7 @@ func (r Ranking) Anonymize() Ranking {
 
 // Fa2017Ece408Ranking holds fields specific to ECE408
 type Fa2017Ece408Ranking struct {
-	Ranking
+	Ranking            `bson:",inline"`
 	Model              string
 	Correctness        float64
 	OpRuntime          time.Duration // runtime reported by the layer
