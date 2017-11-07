@@ -1,10 +1,13 @@
 package model
 
 import (
-	"strings"
+	"hash/fnv"
+	"strconv"
 	"time"
 
-	"github.com/docker/docker/pkg/namesgenerator"
+	"github.com/rai-project/config"
+	"github.com/rai-project/database"
+	"github.com/rai-project/database/mongodb"
 )
 
 // Ranking holds info used to track team rankings
@@ -13,16 +16,7 @@ type Ranking struct {
 	Username     string
 	Teamname     string
 	ProjectURL   string // where the file was uploaded
-	IsSubmission bool   // is a final submission
-}
-
-// Anonymize produces an anonymous Ranking
-func (r Ranking) Anonymize() Ranking {
-	ret := r
-	teamname := strings.Join(strings.Split(namesgenerator.GetRandomName(0), "_"), " ")
-	ret.Teamname = strings.Title(teamname)
-	ret.ProjectURL = "--"
-	return ret
+	IsSubmission bool   `bson:"is_submission"` // is a final submission
 }
 
 // Fa2017Ece408Ranking holds fields specific to ECE408
@@ -36,30 +30,66 @@ type Fa2017Ece408Ranking struct {
 	ElapsedFullRuntime time.Duration // elapsed from /usr/bin/time
 }
 
+func anonymizeString(s string) string {
+	h := fnv.New32a()
+	h.Write([]byte(s + ":::" + config.App.Secret))
+	return strconv.FormatUint(uint64(h.Sum32()), 10)
+}
+
+// Anonymize produces an anonymous Fa2017Ece408Ranking
+func (r Fa2017Ece408Ranking) Anonymize() Fa2017Ece408Ranking {
+	h := fnv.New32a()
+	h.Write([]byte(r.Teamname + ":::" + config.App.Secret))
+	ret := r
+	ret.Username = anonymizeString(r.Username)
+	ret.Teamname = anonymizeString(r.Teamname)
+	ret.ProjectURL = "--"
+	return ret
+}
+
+func (Fa2017Ece408Ranking) TableName() string {
+	return "rankings"
+}
+
+type Fa2017Ece408RankingCollection struct {
+	*mongodb.MongoTable
+}
+
+func NewFa2017Ece408RankingCollection(db database.Database) (*Fa2017Ece408RankingCollection, error) {
+	tbl, err := mongodb.NewTable(db, Fa2017Ece408Ranking{}.TableName())
+	if err != nil {
+		return nil, err
+	}
+	tbl.Create(nil)
+
+	return &Fa2017Ece408RankingCollection{
+		MongoTable: tbl.(*mongodb.MongoTable),
+	}, nil
+}
+
+func (m *Fa2017Ece408RankingCollection) Close() error {
+	return nil
+}
+
 type Fa2017Ece408Rankings []Fa2017Ece408Ranking
+
+func KeepFirstTeam(rs Fa2017Ece408Rankings) Fa2017Ece408Rankings {
+	res := Fa2017Ece408Rankings{}
+
+	seen := map[string]interface{}{}
+	for _, r := range rs {
+		if _, ok := seen[r.Teamname]; !ok {
+			res = append(res, r)
+			seen[r.Teamname] = true
+		}
+	}
+
+	return res
+}
 
 // ByOpRuntime allows sorting Fa2017Ece408Rankings by OpRuntime
 type ByOpRuntime []Fa2017Ece408Ranking
-type ByUserFullRuntime []Fa2017Ece408Ranking
-type BySystemFullRuntime []Fa2017Ece408Ranking
-type ByElapsedFullRuntime []Fa2017Ece408Ranking
 
 func (r ByOpRuntime) Len() int           { return len(r) }
 func (r ByOpRuntime) Swap(i, j int)      { r[i], r[j] = r[j], r[i] }
 func (r ByOpRuntime) Less(i, j int) bool { return r[i].OpRuntime < r[j].OpRuntime }
-
-func (r ByUserFullRuntime) Len() int           { return len(r) }
-func (r ByUserFullRuntime) Swap(i, j int)      { r[i], r[j] = r[j], r[i] }
-func (r ByUserFullRuntime) Less(i, j int) bool { return r[i].UserFullRuntime < r[j].UserFullRuntime }
-
-func (r BySystemFullRuntime) Len() int      { return len(r) }
-func (r BySystemFullRuntime) Swap(i, j int) { r[i], r[j] = r[j], r[i] }
-func (r BySystemFullRuntime) Less(i, j int) bool {
-	return r[i].SystemFullRuntime < r[j].SystemFullRuntime
-}
-
-func (r ByElapsedFullRuntime) Len() int      { return len(r) }
-func (r ByElapsedFullRuntime) Swap(i, j int) { r[i], r[j] = r[j], r[i] }
-func (r ByElapsedFullRuntime) Less(i, j int) bool {
-	return r[i].ElapsedFullRuntime < r[j].ElapsedFullRuntime
-}
