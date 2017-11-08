@@ -12,11 +12,12 @@ import (
 
 // Ranking holds info used to track team rankings
 type Ranking struct {
-	CreatedAt    time.Time `json:"created_at"  bson:"created_at"`
-	Username     string
-	Teamname     string
-	ProjectURL   string // where the file was uploaded
-	IsSubmission bool   `bson:"is_submission"` // is a final submission
+	CreatedAt     time.Time `json:"created_at"  bson:"created_at"`
+	Username      string
+	Teamname      string
+	ProjectURL    string // where the file was uploaded
+	IsSubmission  bool   `bson:"is_submission"`  // is a final submission
+	SubmissionTag string `bson:"submission_tag"` // more info about the submission
 }
 
 // Fa2017Ece408Ranking holds fields specific to ECE408
