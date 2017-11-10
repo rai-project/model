@@ -3,10 +3,13 @@ package model
 import (
 	"strings"
 	"time"
+
+	"github.com/rai-project/config"
 )
 
 type JobRequest struct {
 	Base
+	ClientVersion      config.VersionInfo `json:"client_version"`
 	UploadKey          string             `json:"upload_key"`
 	User               User               `json:"user" gorm:"ForeignKey:UserID;AssociationForeignKey:Refer"`
 	BuildSpecification BuildSpecification `json:"build_specification"`
