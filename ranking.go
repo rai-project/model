@@ -116,6 +116,36 @@ func KeepFirstTeam(rs Fa2017Ece408Jobs) Fa2017Ece408Jobs {
 	return res
 }
 
+func (i *Inference) isCorrect() bool {
+	if i.Model == "ece408-high" && i.Correctness == 0.8562 {
+		return true
+	}
+	if i.Model == "ece408-low" && i.Correctness == 0.629 {
+		return true
+	}
+	return false
+}
+
+// FilterCorrectInferences returns jobs with correct inferences
+func FilterCorrectInferences(js Fa2017Ece408Jobs) Fa2017Ece408Jobs {
+	res := Fa2017Ece408Jobs{}
+
+	for _, j := range js {
+		inferenceGood := true
+		for _, i := range j.Inferences {
+			if !i.isCorrect() {
+				inferenceGood = false
+				break
+			}
+		}
+		if inferenceGood {
+			res = append(res, j)
+		}
+	}
+
+	return res
+}
+
 type ByMinOpRuntime []Fa2017Ece408Job
 
 func (r ByMinOpRuntime) Len() int           { return len(r) }
