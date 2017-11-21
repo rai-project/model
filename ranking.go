@@ -146,6 +146,26 @@ func FilterCorrectInferences(js Fa2017Ece408Jobs) Fa2017Ece408Jobs {
 	return res
 }
 
+// FilterNonZeroTimes returns jobs with non-zero runtime
+func FilterNonZeroTimes(js Fa2017Ece408Jobs) Fa2017Ece408Jobs {
+	res := Fa2017Ece408Jobs{}
+
+	for _, j := range js {
+		inferenceGood := true
+		for _, i := range j.Inferences {
+			if i.OpRuntime == 0 {
+				inferenceGood = false
+				break
+			}
+		}
+		if inferenceGood {
+			res = append(res, j)
+		}
+	}
+
+	return res
+}
+
 type ByMinOpRuntime []Fa2017Ece408Job
 
 func (r ByMinOpRuntime) Len() int           { return len(r) }
