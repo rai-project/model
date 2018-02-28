@@ -21,6 +21,16 @@ type Inference struct {
 	ElapsedFullRuntime time.Duration // elapsed from /usr/bin/time
 }
 
+// Sp2018Ece408Inference is an inference record for ECE 408 Spring 2018
+type Sp2018Ece408Inference struct {
+	Model              string
+	Correctness        float64
+	OpRuntimes         []time.Duration // run times reported by the layer invocations
+	UserFullRuntime    time.Duration   // user from /usr/bin/time
+	SystemFullRuntime  time.Duration   // system from /usr/bin/time
+	ElapsedFullRuntime time.Duration   // elapsed from /usr/bin/time
+}
+
 // Ranking holds info used to track team rankings
 type Ranking struct {
 	CreatedAt     time.Time `json:"created_at"  bson:"created_at"`
@@ -35,6 +45,11 @@ type Ranking struct {
 type Fa2017Ece408Job struct {
 	Ranking    `bson:",inline"`
 	Inferences []Inference
+}
+
+type Sp2018Ece408Job struct {
+	Ranking    `bson:",inline"`
+	Inferences []Sp2018Ece408Inference
 }
 
 func (j *Fa2017Ece408Job) MinOpRuntime() time.Duration {
@@ -171,3 +186,18 @@ type ByMinOpRuntime []Fa2017Ece408Job
 func (r ByMinOpRuntime) Len() int           { return len(r) }
 func (r ByMinOpRuntime) Swap(i, j int)      { r[i], r[j] = r[j], r[i] }
 func (r ByMinOpRuntime) Less(i, j int) bool { return r[i].MinOpRuntime() < r[j].MinOpRuntime() }
+
+func (j *Sp2018Ece408Job) StartNewInference() {
+	j.Inferences = append(j.Inferences, Sp2018Ece408Inference{})
+}
+
+func (j *Sp2018Ece408Job) CurrentInference() *Sp2018Ece408Inference {
+	if len(j.Inferences) == 0 {
+		j.StartNewInference()
+	}
+	return &j.Inferences[len(j.Inferences)-1]
+}
+
+func (j *Sp2018Ece408Job) RecordOpRuntime(duration time.Duration) {
+	j.CurrentInference().OpRuntimes = append(j.CurrentInference().OpRuntimes, duration)
+}
