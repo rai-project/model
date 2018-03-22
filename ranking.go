@@ -42,37 +42,42 @@ type Ranking struct {
 }
 
 // Fa2017Ece408Job holds fields specific to ECE408
-type Fa2017Ece408Job struct {
-	Ranking    `bson:",inline"`
-	Inferences []Inference
-}
+//type Fa2017Ece408Job struct {
+//	Ranking    `bson:",inline"`
+//	Inferences []Inference
+//}
 
 type Sp2018Ece408Job struct {
 	Ranking    `bson:",inline"`
 	Inferences []Sp2018Ece408Inference
 }
 
-func (j *Fa2017Ece408Job) MinOpRuntime() time.Duration {
+func (j *Sp2018Ece408Job) MinOpRuntime() time.Duration {
 	minSeen := int64(math.MaxInt64)
 
 	for _, i := range j.Inferences {
-		if int64(i.OpRuntime) < minSeen {
-			minSeen = int64(i.OpRuntime)
+		var TotalOpRunTime int64
+		TotalOpRunTime = 0
+		for _, h := range i.OpRuntimes {
+			TotalOpRunTime += int64(h)
+		}
+		if TotalOpRunTime < minSeen {
+			minSeen = TotalOpRunTime
 		}
 	}
 	return time.Duration(minSeen)
 }
 
-func (j *Fa2017Ece408Job) StartNewInference() {
-	j.Inferences = append(j.Inferences, Inference{})
-}
+//func (j *Sp2018Ece408Job) StartNewInference() {
+//	j.Inferences = append(j.Inferences, Inference{})
+//}
 
-func (j *Fa2017Ece408Job) CurrentInference() *Inference {
-	if len(j.Inferences) == 0 {
-		j.StartNewInference()
-	}
-	return &j.Inferences[len(j.Inferences)-1]
-}
+//func (j *Sp2018Ece408Job) CurrentInference() *Inference {
+//	if len(j.Inferences) == 0 {
+//		j.StartNewInference()
+//	}
+//	return &j.Inferences[len(j.Inferences)-1]
+//}
 
 func anonymizeString(s string) string {
 	h := fnv.New32a()
@@ -81,7 +86,7 @@ func anonymizeString(s string) string {
 }
 
 // Anonymize produces an anonymous Fa2017Ece408Job
-func (r Fa2017Ece408Job) Anonymize() Fa2017Ece408Job {
+func (r Sp2018Ece408Job) Anonymize() Sp2018Ece408Job {
 	h := fnv.New32a()
 	h.Write([]byte(r.Teamname + ":::" + config.App.Secret))
 	ret := r
@@ -91,7 +96,7 @@ func (r Fa2017Ece408Job) Anonymize() Fa2017Ece408Job {
 	return ret
 }
 
-func (Fa2017Ece408Job) TableName() string {
+func (Sp2018Ece408Job) TableName() string {
 	return "rankings"
 }
 
@@ -99,8 +104,8 @@ type Fa2017Ece408JobCollection struct {
 	*mongodb.MongoTable
 }
 
-func NewFa2017Ece408JobCollection(db database.Database) (*Fa2017Ece408JobCollection, error) {
-	tbl, err := mongodb.NewTable(db, Fa2017Ece408Job{}.TableName())
+func NewSp2018Ece408JobCollection(db database.Database) (*Fa2017Ece408JobCollection, error) {
+	tbl, err := mongodb.NewTable(db, Sp2018Ece408Job{}.TableName())
 	if err != nil {
 		return nil, err
 	}
@@ -115,10 +120,10 @@ func (m *Fa2017Ece408JobCollection) Close() error {
 	return nil
 }
 
-type Fa2017Ece408Jobs []Fa2017Ece408Job
+type Sp2018Ece408Jobs []Sp2018Ece408Job
 
-func KeepFirstTeam(rs Fa2017Ece408Jobs) Fa2017Ece408Jobs {
-	res := Fa2017Ece408Jobs{}
+func KeepFirstTeam(rs Sp2018Ece408Jobs) Sp2018Ece408Jobs {
+	res := Sp2018Ece408Jobs{}
 
 	seen := map[string]interface{}{}
 	for _, r := range rs {
@@ -131,44 +136,19 @@ func KeepFirstTeam(rs Fa2017Ece408Jobs) Fa2017Ece408Jobs {
 	return res
 }
 
-func (i *Inference) isCorrect() bool {
-	if i.Model == "ece408-high" && i.Correctness == 0.8562 {
-		return true
-	}
-	if i.Model == "ece408-low" && i.Correctness == 0.629 {
-		return true
-	}
-	return false
-}
-
-// FilterCorrectInferences returns jobs with correct inferences
-func FilterCorrectInferences(js Fa2017Ece408Jobs) Fa2017Ece408Jobs {
-	res := Fa2017Ece408Jobs{}
-
-	for _, j := range js {
-		inferenceGood := true
-		for _, i := range j.Inferences {
-			if !i.isCorrect() {
-				inferenceGood = false
-				break
-			}
-		}
-		if inferenceGood {
-			res = append(res, j)
-		}
-	}
-
-	return res
-}
-
 // FilterNonZeroTimes returns jobs with non-zero runtime
-func FilterNonZeroTimes(js Fa2017Ece408Jobs) Fa2017Ece408Jobs {
-	res := Fa2017Ece408Jobs{}
+func FilterNonZeroTimes(js Sp2018Ece408Jobs) Sp2018Ece408Jobs {
+	res := Sp2018Ece408Jobs{}
 
 	for _, j := range js {
 		inferenceGood := true
 		for _, i := range j.Inferences {
-			if i.OpRuntime == 0 {
+			var TotalOpRunTime int64
+			TotalOpRunTime = 0
+			for _, h := range i.OpRuntimes {
+				TotalOpRunTime += int64(h)
+			}
+			if TotalOpRunTime == 0 {
 				inferenceGood = false
 				break
 			}
@@ -181,7 +161,7 @@ func FilterNonZeroTimes(js Fa2017Ece408Jobs) Fa2017Ece408Jobs {
 	return res
 }
 
-type ByMinOpRuntime []Fa2017Ece408Job
+type ByMinOpRuntime []Sp2018Ece408Job
 
 func (r ByMinOpRuntime) Len() int           { return len(r) }
 func (r ByMinOpRuntime) Swap(i, j int)      { r[i], r[j] = r[j], r[i] }
