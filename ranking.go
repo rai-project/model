@@ -21,8 +21,8 @@ type Inference struct {
 	ElapsedFullRuntime time.Duration // elapsed from /usr/bin/time
 }
 
-// Sp2018Ece408Inference is an inference record for ECE 408 Spring 2018
-type Sp2018Ece408Inference struct {
+// Ece408Inference is an inference record for ECE 408 Spring 2018
+type Ece408Inference struct {
 	Model              string
 	Correctness        float64
 	OpRuntimes         []time.Duration // run times reported by the layer invocations
@@ -41,18 +41,12 @@ type Ranking struct {
 	SubmissionTag string `bson:"submission_tag"` // more info about the submission
 }
 
-// Fa2017Ece408Job holds fields specific to ECE408
-//type Fa2017Ece408Job struct {
-//	Ranking    `bson:",inline"`
-//	Inferences []Inference
-//}
-
-type Sp2018Ece408Job struct {
+type Ece408Job struct {
 	Ranking    `bson:",inline"`
-	Inferences []Sp2018Ece408Inference
+	Inferences []Ece408Inference
 }
 
-func (j *Sp2018Ece408Job) MinOpRuntime() time.Duration {
+func (j *Ece408Job) MinOpRuntime() time.Duration {
 	minSeen := int64(math.MaxInt64)
 
 	for _, i := range j.Inferences {
@@ -68,25 +62,14 @@ func (j *Sp2018Ece408Job) MinOpRuntime() time.Duration {
 	return time.Duration(minSeen)
 }
 
-//func (j *Sp2018Ece408Job) StartNewInference() {
-//	j.Inferences = append(j.Inferences, Inference{})
-//}
-
-//func (j *Sp2018Ece408Job) CurrentInference() *Inference {
-//	if len(j.Inferences) == 0 {
-//		j.StartNewInference()
-//	}
-//	return &j.Inferences[len(j.Inferences)-1]
-//}
-
 func anonymizeString(s string) string {
 	h := fnv.New32a()
 	h.Write([]byte(s + ":::" + config.App.Secret))
 	return strconv.FormatUint(uint64(h.Sum32()), 10)
 }
 
-// Anonymize produces an anonymous Fa2017Ece408Job
-func (r Sp2018Ece408Job) Anonymize() Sp2018Ece408Job {
+// Anonymize produces an anonymous Ece408Job
+func (r Ece408Job) Anonymize() Ece408Job {
 	h := fnv.New32a()
 	h.Write([]byte(r.Teamname + ":::" + config.App.Secret))
 	ret := r
@@ -96,34 +79,34 @@ func (r Sp2018Ece408Job) Anonymize() Sp2018Ece408Job {
 	return ret
 }
 
-func (Sp2018Ece408Job) TableName() string {
+func (Ece408Job) TableName() string {
 	return "rankings"
 }
 
-type Fa2017Ece408JobCollection struct {
+type Ece408JobCollection struct {
 	*mongodb.MongoTable
 }
 
-func NewSp2018Ece408JobCollection(db database.Database) (*Fa2017Ece408JobCollection, error) {
-	tbl, err := mongodb.NewTable(db, Sp2018Ece408Job{}.TableName())
+func NewEce408JobCollection(db database.Database) (*Ece408JobCollection, error) {
+	tbl, err := mongodb.NewTable(db, Ece408Job{}.TableName())
 	if err != nil {
 		return nil, err
 	}
 	tbl.Create(nil)
 
-	return &Fa2017Ece408JobCollection{
+	return &Ece408JobCollection{
 		MongoTable: tbl.(*mongodb.MongoTable),
 	}, nil
 }
 
-func (m *Fa2017Ece408JobCollection) Close() error {
+func (m *Ece408JobCollection) Close() error {
 	return nil
 }
 
-type Sp2018Ece408Jobs []Sp2018Ece408Job
+type Ece408Jobs []Ece408Job
 
-func KeepFirstTeam(rs Sp2018Ece408Jobs) Sp2018Ece408Jobs {
-	res := Sp2018Ece408Jobs{}
+func KeepFirstTeam(rs Ece408Jobs) Ece408Jobs {
+	res := Ece408Jobs{}
 
 	seen := map[string]interface{}{}
 	for _, r := range rs {
@@ -137,8 +120,8 @@ func KeepFirstTeam(rs Sp2018Ece408Jobs) Sp2018Ece408Jobs {
 }
 
 // FilterNonZeroTimes returns jobs with non-zero runtime
-func FilterNonZeroTimes(js Sp2018Ece408Jobs) Sp2018Ece408Jobs {
-	res := Sp2018Ece408Jobs{}
+func FilterNonZeroTimes(js Ece408Jobs) Ece408Jobs {
+	res := Ece408Jobs{}
 
 	for _, j := range js {
 		inferenceGood := true
@@ -161,23 +144,23 @@ func FilterNonZeroTimes(js Sp2018Ece408Jobs) Sp2018Ece408Jobs {
 	return res
 }
 
-type ByMinOpRuntime []Sp2018Ece408Job
+type ByMinOpRuntime []Ece408Job
 
 func (r ByMinOpRuntime) Len() int           { return len(r) }
 func (r ByMinOpRuntime) Swap(i, j int)      { r[i], r[j] = r[j], r[i] }
 func (r ByMinOpRuntime) Less(i, j int) bool { return r[i].MinOpRuntime() < r[j].MinOpRuntime() }
 
-func (j *Sp2018Ece408Job) StartNewInference() {
-	j.Inferences = append(j.Inferences, Sp2018Ece408Inference{})
+func (j *Ece408Job) StartNewInference() {
+	j.Inferences = append(j.Inferences, Ece408Inference{})
 }
 
-func (j *Sp2018Ece408Job) CurrentInference() *Sp2018Ece408Inference {
+func (j *Ece408Job) CurrentInference() *Ece408Inference {
 	if len(j.Inferences) == 0 {
 		j.StartNewInference()
 	}
 	return &j.Inferences[len(j.Inferences)-1]
 }
 
-func (j *Sp2018Ece408Job) RecordOpRuntime(duration time.Duration) {
+func (j *Ece408Job) RecordOpRuntime(duration time.Duration) {
 	j.CurrentInference().OpRuntimes = append(j.CurrentInference().OpRuntimes, duration)
 }
