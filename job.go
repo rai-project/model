@@ -2,7 +2,6 @@ package model
 
 import (
 	"strings"
-	"time"
 
 	"github.com/rai-project/config"
 )
@@ -71,13 +70,6 @@ const (
 	StdinResponse  ResponseKind = "Stdin"
 	EndResponse    ResponseKind = "End"
 )
-
-type JobResponse struct {
-	ID        string       `json:"id"`
-	Kind      ResponseKind `json:"kind"`
-	Body      []byte       `json:"body"`
-	CreatedAt time.Time    `json:"created_at"`
-}
 
 func (b *BuildImageSpecification) PushQ() bool {
 	if b == nil {

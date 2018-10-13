@@ -1,3 +1,5 @@
+// +build ece408ProjectMode
+
 package model
 
 import (
@@ -10,16 +12,6 @@ import (
 	"github.com/rai-project/database"
 	"github.com/rai-project/database/mongodb"
 )
-
-//Inference represents a forward run of the network
-type Inference struct {
-	Model              string
-	Correctness        float64
-	OpRuntime          time.Duration // runtime reported by the layer
-	UserFullRuntime    time.Duration // user from /usr/bin/time
-	SystemFullRuntime  time.Duration // system from /usr/bin/time
-	ElapsedFullRuntime time.Duration // elapsed from /usr/bin/time
-}
 
 // Ece408Inference is an inference record for ECE 408 Spring 2018
 type Ece408Inference struct {
@@ -41,12 +33,12 @@ type Ranking struct {
 	SubmissionTag string `bson:"submission_tag"` // more info about the submission
 }
 
-type Ece408Job struct {
+type Ece408JobResponse struct {
 	Ranking    `bson:",inline"`
 	Inferences []Ece408Inference
 }
 
-func (j *Ece408Job) MinOpRuntime() time.Duration {
+func (j *Ece408JobResponse) MinOpRuntime() time.Duration {
 	minSeen := int64(math.MaxInt64)
 
 	for _, i := range j.Inferences {
@@ -68,8 +60,8 @@ func anonymizeString(s string) string {
 	return strconv.FormatUint(uint64(h.Sum32()), 10)
 }
 
-// Anonymize produces an anonymous Ece408Job
-func (r Ece408Job) Anonymize() Ece408Job {
+// Anonymize produces an anonymous Ece408JobResponse
+func (r Ece408JobResponse) Anonymize() Ece408JobResponse {
 	h := fnv.New32a()
 	h.Write([]byte(r.Teamname + ":::" + config.App.Secret))
 	ret := r
@@ -79,34 +71,34 @@ func (r Ece408Job) Anonymize() Ece408Job {
 	return ret
 }
 
-func (Ece408Job) TableName() string {
+func (Ece408JobResponse) TableName() string {
 	return "rankings"
 }
 
-type Ece408JobCollection struct {
+type Ece408JobResponseCollection struct {
 	*mongodb.MongoTable
 }
 
-func NewEce408JobCollection(db database.Database) (*Ece408JobCollection, error) {
-	tbl, err := mongodb.NewTable(db, Ece408Job{}.TableName())
+func NewEce408JobResponseCollection(db database.Database) (*Ece408JobResponseCollection, error) {
+	tbl, err := mongodb.NewTable(db, Ece408JobResponse{}.TableName())
 	if err != nil {
 		return nil, err
 	}
 	tbl.Create(nil)
 
-	return &Ece408JobCollection{
+	return &Ece408JobResponseCollection{
 		MongoTable: tbl.(*mongodb.MongoTable),
 	}, nil
 }
 
-func (m *Ece408JobCollection) Close() error {
+func (m *Ece408JobResponseCollection) Close() error {
 	return nil
 }
 
-type Ece408Jobs []Ece408Job
+type Ece408JobResponses []Ece408JobResponse
 
-func KeepFirstTeam(rs Ece408Jobs) Ece408Jobs {
-	res := Ece408Jobs{}
+func KeepFirstTeam(rs Ece408JobResponses) Ece408JobResponses {
+	res := Ece408JobResponses{}
 
 	seen := map[string]interface{}{}
 	for _, r := range rs {
@@ -120,8 +112,8 @@ func KeepFirstTeam(rs Ece408Jobs) Ece408Jobs {
 }
 
 // FilterNonZeroTimes returns jobs with non-zero runtime
-func FilterNonZeroTimes(js Ece408Jobs) Ece408Jobs {
-	res := Ece408Jobs{}
+func FilterNonZeroTimes(js Ece408JobResponses) Ece408JobResponses {
+	res := Ece408JobResponses{}
 
 	for _, j := range js {
 		inferenceGood := true
@@ -144,23 +136,23 @@ func FilterNonZeroTimes(js Ece408Jobs) Ece408Jobs {
 	return res
 }
 
-type ByMinOpRuntime []Ece408Job
+type ByMinOpRuntime []Ece408JobResponse
 
 func (r ByMinOpRuntime) Len() int           { return len(r) }
 func (r ByMinOpRuntime) Swap(i, j int)      { r[i], r[j] = r[j], r[i] }
 func (r ByMinOpRuntime) Less(i, j int) bool { return r[i].MinOpRuntime() < r[j].MinOpRuntime() }
 
-func (j *Ece408Job) StartNewInference() {
+func (j *Ece408JobResponse) StartNewInference() {
 	j.Inferences = append(j.Inferences, Ece408Inference{})
 }
 
-func (j *Ece408Job) CurrentInference() *Ece408Inference {
+func (j *Ece408JobResponse) CurrentInference() *Ece408Inference {
 	if len(j.Inferences) == 0 {
 		j.StartNewInference()
 	}
 	return &j.Inferences[len(j.Inferences)-1]
 }
 
-func (j *Ece408Job) RecordOpRuntime(duration time.Duration) {
+func (j *Ece408JobResponse) RecordOpRuntime(duration time.Duration) {
 	j.CurrentInference().OpRuntimes = append(j.CurrentInference().OpRuntimes, duration)
 }

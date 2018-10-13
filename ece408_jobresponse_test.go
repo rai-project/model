@@ -1,3 +1,4 @@
+// +build ece408ProjectMode
 package model
 
 import (
