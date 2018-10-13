@@ -1,5 +1,7 @@
 package model
 
+import time "time"
+
 // easyjson:json
 type BuildCommands []string
 
@@ -43,7 +45,14 @@ type Resources struct {
 	CPU           CPUResources   `json:"cpu" yaml:"cpu" validate:"required,dive,required"`
 	GPU           *GPUResources  `json:"gpu,omitempty" yaml:"gpu"`
 	DataResources *DataResources `json:"dataresources,omitempty" yaml:"dataresources"`
-	Network       bool           `json:"network" yaml:"network"`
+	Limits        Limits         `json:"limits" yaml:"limits"`
+}
+
+// easyjson:json
+type Limits struct {
+	Network  bool          `json:"network" yaml:"network"`
+	Time     time.Duration `json:"time" yaml:"time"`
+	DataSize uint64        `json:"datasize" yaml:"datasize"`
 }
 
 // easyjson:json
