@@ -79,7 +79,9 @@ func easyjsonC80ae7adDecodeGithubComRaiProjectModel(in *jlexer.Lexer, out *User)
     case "acl":
       (out.ACL).UnmarshalEasyJSON(in)
     case "id":
-      out.ID = string(in.String())
+      if data := in.Raw(); in.Ok() {
+        in.AddError( (out.ID).UnmarshalJSON(data) )
+      }
     case "created_at":
       if data := in.Raw(); in.Ok() {
         in.AddError( (out.CreatedAt).UnmarshalJSON(data) )
@@ -250,7 +252,7 @@ func easyjsonC80ae7adEncodeGithubComRaiProjectModel(out *jwriter.Writer, in User
     } else {
       out.RawString(prefix)
     }
-    out.String(string(in.ID))
+    out.Raw( (in.ID).MarshalJSON() )
   }
   {
     const prefix string = ",\"created_at\":"
@@ -870,7 +872,9 @@ func easyjsonC80ae7adDecodeGithubComRaiProjectModel6(in *jlexer.Lexer, out *JobR
     case "build_specification":
       (out.BuildSpecification).UnmarshalEasyJSON(in)
     case "id":
-      out.ID = string(in.String())
+      if data := in.Raw(); in.Ok() {
+        in.AddError( (out.ID).UnmarshalJSON(data) )
+      }
     case "created_at":
       if data := in.Raw(); in.Ok() {
         in.AddError( (out.CreatedAt).UnmarshalJSON(data) )
@@ -957,7 +961,7 @@ func easyjsonC80ae7adEncodeGithubComRaiProjectModel6(out *jwriter.Writer, in Job
     } else {
       out.RawString(prefix)
     }
-    out.String(string(in.ID))
+    out.Raw( (in.ID).MarshalJSON() )
   }
   {
     const prefix string = ",\"created_at\":"
@@ -1762,7 +1766,9 @@ func easyjsonC80ae7adDecodeGithubComRaiProjectModel14(in *jlexer.Lexer, out *Bas
     }
     switch key {
     case "id":
-      out.ID = string(in.String())
+      if data := in.Raw(); in.Ok() {
+        in.AddError( (out.ID).UnmarshalJSON(data) )
+      }
     case "created_at":
       if data := in.Raw(); in.Ok() {
         in.AddError( (out.CreatedAt).UnmarshalJSON(data) )
@@ -1809,7 +1815,7 @@ func easyjsonC80ae7adEncodeGithubComRaiProjectModel14(out *jwriter.Writer, in Ba
     } else {
       out.RawString(prefix)
     }
-    out.String(string(in.ID))
+    out.Raw( (in.ID).MarshalJSON() )
   }
   {
     const prefix string = ",\"created_at\":"
