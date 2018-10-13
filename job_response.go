@@ -6,7 +6,7 @@ import (
 	"github.com/rai-project/config"
 )
 
-// ffjson: nodecoder
+// ffjson
 type JobResponse struct {
 	ID        string       `json:"id"`
 	Kind      ResponseKind `json:"kind"`

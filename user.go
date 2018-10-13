@@ -1,6 +1,6 @@
 package model
 
-// ffjson: nodecoder
+// ffjson
 type User struct {
 	Base        `toml:"-" yaml:"-"`
 	Firstname   string       `json:"firstname" yaml:"firstname,omitempty" toml:"firstname,omitempty"`

@@ -1,6 +1,6 @@
 package model
 
-// ffjson: nodecoder
+// ffjson
 type Team struct {
 	Name string `json:"name"`
 }

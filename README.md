@@ -1,5 +1,9 @@
 # README
 
+## Developing
+
+Make sure to run `go generate` anytime you change one of the structures in the code.
+
 ## Testing
 
 To run a mongodb on localhost (for `ranking_test.go`), try

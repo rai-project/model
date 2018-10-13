@@ -2,7 +2,7 @@ package model
 
 import "time"
 
-// ffjson: nodecoder
+// ffjson
 type ACL struct {
 	MaxRuntimeLimit time.Duration
 	MaxStorageLimit uint64
