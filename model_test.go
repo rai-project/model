@@ -34,13 +34,13 @@ func TestInsertRanking(t *testing.T) {
 	assert.NotEmpty(t, db)
 	defer db.Close()
 
-	tbl, err := mongodb.NewTable(db, "ranking")
+	tbl, err := mongodb.NewTable(db, "test")
 	assert.NoError(t, err)
 	assert.NotEmpty(t, tbl)
 
 	// tbl.Create(nil)
 
-	err = tbl.Insert(ECE408Ranking{
+	err = tbl.Insert(Base{
 		ID:        bson.NewObjectId(),
 		CreatedAt: time.Now(),
 	})
