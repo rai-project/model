@@ -982,17 +982,17 @@ func easyjsonC80ae7adDecodeGithubComRaiProjectConfig(in *jlexer.Lexer, out *conf
        continue
     }
     switch key {
-    case "Version":
+    case "version":
       out.Version = string(in.String())
-    case "BuildDate":
+    case "build_date":
       out.BuildDate = string(in.String())
-    case "GitCommit":
+    case "git_commit":
       out.GitCommit = string(in.String())
-    case "GitBranch":
+    case "git_branch":
       out.GitBranch = string(in.String())
-    case "GitState":
+    case "git_state":
       out.GitState = string(in.String())
-    case "GitSummary":
+    case "git_summary":
       out.GitSummary = string(in.String())
     default:
       in.AddError(&jlexer.LexerError{
@@ -1013,7 +1013,7 @@ func easyjsonC80ae7adEncodeGithubComRaiProjectConfig(out *jwriter.Writer, in con
   first := true
   _ = first
   {
-    const prefix string = ",\"Version\":"
+    const prefix string = ",\"version\":"
     if first {
       first = false
       out.RawString(prefix[1:])
@@ -1023,7 +1023,7 @@ func easyjsonC80ae7adEncodeGithubComRaiProjectConfig(out *jwriter.Writer, in con
     out.String(string(in.Version))
   }
   {
-    const prefix string = ",\"BuildDate\":"
+    const prefix string = ",\"build_date\":"
     if first {
       first = false
       out.RawString(prefix[1:])
@@ -1033,7 +1033,7 @@ func easyjsonC80ae7adEncodeGithubComRaiProjectConfig(out *jwriter.Writer, in con
     out.String(string(in.BuildDate))
   }
   {
-    const prefix string = ",\"GitCommit\":"
+    const prefix string = ",\"git_commit\":"
     if first {
       first = false
       out.RawString(prefix[1:])
@@ -1043,7 +1043,7 @@ func easyjsonC80ae7adEncodeGithubComRaiProjectConfig(out *jwriter.Writer, in con
     out.String(string(in.GitCommit))
   }
   {
-    const prefix string = ",\"GitBranch\":"
+    const prefix string = ",\"git_branch\":"
     if first {
       first = false
       out.RawString(prefix[1:])
@@ -1053,7 +1053,7 @@ func easyjsonC80ae7adEncodeGithubComRaiProjectConfig(out *jwriter.Writer, in con
     out.String(string(in.GitBranch))
   }
   {
-    const prefix string = ",\"GitState\":"
+    const prefix string = ",\"git_state\":"
     if first {
       first = false
       out.RawString(prefix[1:])
@@ -1063,7 +1063,7 @@ func easyjsonC80ae7adEncodeGithubComRaiProjectConfig(out *jwriter.Writer, in con
     out.String(string(in.GitState))
   }
   {
-    const prefix string = ",\"GitSummary\":"
+    const prefix string = ",\"git_summary\":"
     if first {
       first = false
       out.RawString(prefix[1:])
@@ -1834,13 +1834,13 @@ func easyjsonC80ae7adDecodeGithubComRaiProjectModel15(in *jlexer.Lexer, out *ACL
        continue
     }
     switch key {
-    case "MaxRuntimeLimit":
+    case "max_runtime_limit":
       out.MaxRuntimeLimit = time.Duration(in.Int64())
-    case "MaxStorageLimit":
+    case "max_storage_limit":
       out.MaxStorageLimit = uint64(in.Uint64())
-    case "NetworkAccess":
+    case "network_access":
       out.NetworkAccess = bool(in.Bool())
-    case "MountAccess":
+    case "mount_access":
       out.MountAccess = bool(in.Bool())
     default:
       in.AddError(&jlexer.LexerError{
@@ -1861,7 +1861,7 @@ func easyjsonC80ae7adEncodeGithubComRaiProjectModel15(out *jwriter.Writer, in AC
   first := true
   _ = first
   {
-    const prefix string = ",\"MaxRuntimeLimit\":"
+    const prefix string = ",\"max_runtime_limit\":"
     if first {
       first = false
       out.RawString(prefix[1:])
@@ -1871,7 +1871,7 @@ func easyjsonC80ae7adEncodeGithubComRaiProjectModel15(out *jwriter.Writer, in AC
     out.Int64(int64(in.MaxRuntimeLimit))
   }
   {
-    const prefix string = ",\"MaxStorageLimit\":"
+    const prefix string = ",\"max_storage_limit\":"
     if first {
       first = false
       out.RawString(prefix[1:])
@@ -1881,7 +1881,7 @@ func easyjsonC80ae7adEncodeGithubComRaiProjectModel15(out *jwriter.Writer, in AC
     out.Uint64(uint64(in.MaxStorageLimit))
   }
   {
-    const prefix string = ",\"NetworkAccess\":"
+    const prefix string = ",\"network_access\":"
     if first {
       first = false
       out.RawString(prefix[1:])
@@ -1891,7 +1891,7 @@ func easyjsonC80ae7adEncodeGithubComRaiProjectModel15(out *jwriter.Writer, in AC
     out.Bool(bool(in.NetworkAccess))
   }
   {
-    const prefix string = ",\"MountAccess\":"
+    const prefix string = ",\"mount_access\":"
     if first {
       first = false
       out.RawString(prefix[1:])
