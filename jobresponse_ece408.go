@@ -23,20 +23,20 @@ type Ece408Inference struct {
 
 // Ranking holds info used to track team rankings
 type ECE408Ranking struct {
-	CreatedAt     time.Time `json:"created_at,omitempty" bson:"created_at"`
-	Username      string    `json:"username,omitempty"`
-	Teamname      string    `json:"teamname,omitempty"`
-	ProjectURL    string    `json:"project_url,omitempty"`                          // where the file was uploaded
-	IsSubmission  bool      `bson:"is_submission" json:"is_submission,omitempty"`   // is a final submission
-	SubmissionTag string    `bson:"submission_tag" json:"submission_tag,omitempty"` // more info about the submission
+	Base          `json:",inline"`
+	Username      string `json:"username,omitempty"`
+	Teamname      string `json:"teamname,omitempty"`
+	ProjectURL    string `json:"project_url,omitempty"`                          // where the file was uploaded
+	IsSubmission  bool   `bson:"is_submission" json:"is_submission,omitempty"`   // is a final submission
+	SubmissionTag string `bson:"submission_tag" json:"submission_tag,omitempty"` // more info about the submission
 }
 
-type Ece408JobResponse struct {
+type Ece408JobResponseBody struct {
 	ECE408Ranking `bson:",inline"`
 	Inferences    []Ece408Inference
 }
 
-func (j *Ece408JobResponse) MinOpRuntime() time.Duration {
+func (j *Ece408JobResponseBody) MinOpRuntime() time.Duration {
 	minSeen := int64(math.MaxInt64)
 
 	for _, i := range j.Inferences {
@@ -58,8 +58,8 @@ func anonymizeString(s string) string {
 	return strconv.FormatUint(uint64(h.Sum32()), 10)
 }
 
-// Anonymize produces an anonymous Ece408JobResponse
-func (r Ece408JobResponse) Anonymize() Ece408JobResponse {
+// Anonymize produces an anonymous Ece408JobResponseBody
+func (r Ece408JobResponseBody) Anonymize() Ece408JobResponseBody {
 	h := fnv.New32a()
 	h.Write([]byte(r.Teamname + ":::" + config.App.Secret))
 	ret := r
@@ -69,34 +69,34 @@ func (r Ece408JobResponse) Anonymize() Ece408JobResponse {
 	return ret
 }
 
-func (Ece408JobResponse) TableName() string {
+func (Ece408JobResponseBody) TableName() string {
 	return "ece408_rankings"
 }
 
-type Ece408JobResponseCollection struct {
+type Ece408JobResponseBodyCollection struct {
 	*mongodb.MongoTable
 }
 
-func NewEce408JobResponseCollection(db database.Database) (*Ece408JobResponseCollection, error) {
-	tbl, err := mongodb.NewTable(db, Ece408JobResponse{}.TableName())
+func NewEce408JobResponseBodyCollection(db database.Database) (*Ece408JobResponseBodyCollection, error) {
+	tbl, err := mongodb.NewTable(db, Ece408JobResponseBody{}.TableName())
 	if err != nil {
 		return nil, err
 	}
 	tbl.Create(nil)
 
-	return &Ece408JobResponseCollection{
+	return &Ece408JobResponseBodyCollection{
 		MongoTable: tbl.(*mongodb.MongoTable),
 	}, nil
 }
 
-func (m *Ece408JobResponseCollection) Close() error {
+func (m *Ece408JobResponseBodyCollection) Close() error {
 	return nil
 }
 
-type Ece408JobResponses []Ece408JobResponse
+type Ece408JobResponseBodys []Ece408JobResponseBody
 
-func KeepFirstTeam(rs Ece408JobResponses) Ece408JobResponses {
-	res := Ece408JobResponses{}
+func KeepFirstTeam(rs Ece408JobResponseBodys) Ece408JobResponseBodys {
+	res := Ece408JobResponseBodys{}
 
 	seen := map[string]interface{}{}
 	for _, r := range rs {
@@ -110,8 +110,8 @@ func KeepFirstTeam(rs Ece408JobResponses) Ece408JobResponses {
 }
 
 // FilterNonZeroTimes returns jobs with non-zero runtime
-func FilterNonZeroTimes(js Ece408JobResponses) Ece408JobResponses {
-	res := Ece408JobResponses{}
+func FilterNonZeroTimes(js Ece408JobResponseBodys) Ece408JobResponseBodys {
+	res := Ece408JobResponseBodys{}
 
 	for _, j := range js {
 		inferenceGood := true
@@ -133,23 +133,23 @@ func FilterNonZeroTimes(js Ece408JobResponses) Ece408JobResponses {
 	return res
 }
 
-type ByMinOpRuntime []Ece408JobResponse
+type ByMinOpRuntime []Ece408JobResponseBody
 
 func (r ByMinOpRuntime) Len() int           { return len(r) }
 func (r ByMinOpRuntime) Swap(i, j int)      { r[i], r[j] = r[j], r[i] }
 func (r ByMinOpRuntime) Less(i, j int) bool { return r[i].MinOpRuntime() < r[j].MinOpRuntime() }
 
-func (j *Ece408JobResponse) StartNewInference() {
+func (j *Ece408JobResponseBody) StartNewInference() {
 	j.Inferences = append(j.Inferences, Ece408Inference{})
 }
 
-func (j *Ece408JobResponse) CurrentInference() *Ece408Inference {
+func (j *Ece408JobResponseBody) CurrentInference() *Ece408Inference {
 	if len(j.Inferences) == 0 {
 		j.StartNewInference()
 	}
 	return &j.Inferences[len(j.Inferences)-1]
 }
 
-func (j *Ece408JobResponse) RecordOpRuntime(duration time.Duration) {
+func (j *Ece408JobResponseBody) RecordOpRuntime(duration time.Duration) {
 	j.CurrentInference().OpRuntimes = append(j.CurrentInference().OpRuntimes, duration)
 }

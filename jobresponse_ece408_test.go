@@ -40,7 +40,7 @@ func TestInsertRanking(t *testing.T) {
 
 	// tbl.Create(nil)
 
-	err = tbl.Insert(Ranking{
+	err = tbl.Insert(ECE408Ranking{
 		ID:        bson.NewObjectId(),
 		CreatedAt: time.Now(),
 	})
