@@ -1,13 +1,5 @@
-//go:generate go get -v github.com/pquerna/ffjson
+//go:generate go get -v github.com/ugorji/go/codec/codecgen
 //go:generate go get -v github.com/valyala/fastjson
-//go:generate ffjson -nodecoder acl.go
-//go:generate ffjson -nodecoder base.go
-//go:generate ffjson -nodecoder credentials.go
-//go:generate ffjson -nodecoder ece408_jobresponse.go
-//go:generate ffjson -nodecoder job_request.go
-//go:generate ffjson -nodecoder job_response.go
-//go:generate ffjson -nodecoder response.go
-//go:generate ffjson -nodecoder team.go
-//go:generate ffjson -nodecoder user.go
+//go:generate codecgen -rt=json -u=true -o codec.generated.go acl.go base.go credentials.go roles.go job_request.go job_response.go team.go user.go response.go ece408_jobresponse.go
 
 package model
