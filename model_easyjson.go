@@ -75,7 +75,7 @@ func easyjsonC80ae7adDecodeGithubComRaiProjectModel(in *jlexer.Lexer, out *User)
         (*out.DockerHub).UnmarshalEasyJSON(in)
       }
     case "role":
-      out.Role = string(in.String())
+      out.Role = Role(in.String())
     case "acl":
       (out.ACL).UnmarshalEasyJSON(in)
     case "id":
