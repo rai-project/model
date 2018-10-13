@@ -1,5 +1,6 @@
 package model
 
+// ffjson: nodecoder
 type User struct {
 	Base        `toml:"-" yaml:"-"`
 	Firstname   string       `json:"firstname" yaml:"firstname,omitempty" toml:"firstname,omitempty"`
@@ -12,4 +13,10 @@ type User struct {
 	Password    string       `json:"password" yaml:"-" toml:"-"`
 	Team        *Team        `json:"team" gorm:"ForeignKey:TeamID;AssociationForeignKey:Refer" toml:"-"`
 	DockerHub   *Credentials `json:"dockerhub,omitempty" yaml:"dockerhub,omitempty" toml:"dockerhub,omitempty"`
+	Role        string       `json:"role" yaml:"role"`
+	ACL         ACL          `json:"acl,omitempty" yaml:"acl"`
+}
+
+func (User) TableName() string {
+	return "users"
 }

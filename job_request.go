@@ -6,6 +6,7 @@ import (
 	"github.com/rai-project/config"
 )
 
+// ffjson: nodecoder
 type JobRequest struct {
 	Base
 	ClientVersion      config.VersionInfo `json:"client_version"`
@@ -14,8 +15,10 @@ type JobRequest struct {
 	BuildSpecification BuildSpecification `json:"build_specification"`
 }
 
+// ffjson: nodecoder
 type BuildCommands []string
 
+// ffjson: nodecoder
 type Push struct {
 	Push        bool        `json:"push" yaml:"push"`
 	ImageName   string      `json:"image_name" yaml:"image_name"`
@@ -23,6 +26,7 @@ type Push struct {
 	Credentials Credentials `json:"credentials" yaml:"credentials"`
 }
 
+// ffjson: nodecoder
 type BuildImageSpecification struct {
 	ImageName  string `json:"image_name" yaml:"image_name"`
 	Dockerfile string `json:"dockerfile" yaml:"dockerfile"`
@@ -30,38 +34,45 @@ type BuildImageSpecification struct {
 	NoCache    bool   `json:"no_cache" yaml:"no_cache"`
 }
 
+// ffjson: nodecoder
 type RAIBuildSpecification struct {
 	Version        string `json:"version" yaml:"version"`
 	ContainerImage string `json:"image" yaml:"image"`
 }
 
+// ffjson: nodecoder
 type CommandsBuildSpecification struct {
 	BuildImage *BuildImageSpecification `json:"build_image,omitempty" yaml:"build_image,omitempty"`
 	Build      BuildCommands            `json:"build" yaml:"build"`
 }
 
+// ffjson: nodecoder
 type BuildSpecification struct {
 	RAI       RAIBuildSpecification      `json:"rai" yaml:"rai"`
 	Resources Resources                  `json:"resources" yaml:"resources"`
 	Commands  CommandsBuildSpecification `json:"commands" yaml:"commands"`
 }
 
+// ffjson: nodecoder
 type Resources struct {
 	CPU     CPUResources  `json:"cpu" yaml:"cpu"`
 	GPU     *GPUResources `json:"gpu" yaml:"gpu"`
 	Network bool          `json:"network" yaml:"network"`
 }
 
+// ffjson: nodecoder
 type CPUResources struct {
 	Architecture string `json:"architecture" yaml:"architecture"`
 }
 
+// ffjson: nodecoder
 type GPUResources struct {
 	Architecture string `json:"architecture" yaml:"architecture"`
 	Count        int    `json:"count" yaml:"count"`
 	Memory       int64  `json:"memory" yaml:"memory"`
 }
 
+// ffjson: nodecoder
 type ResponseKind string
 
 const (

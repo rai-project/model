@@ -24,7 +24,7 @@ type Ece408Inference struct {
 }
 
 // Ranking holds info used to track team rankings
-type Ranking struct {
+type ECE408Ranking struct {
 	CreatedAt     time.Time `json:"created_at"  bson:"created_at"`
 	Username      string
 	Teamname      string
@@ -34,8 +34,8 @@ type Ranking struct {
 }
 
 type Ece408JobResponse struct {
-	Ranking    `bson:",inline"`
-	Inferences []Ece408Inference
+	ECE408Ranking `bson:",inline"`
+	Inferences    []Ece408Inference
 }
 
 func (j *Ece408JobResponse) MinOpRuntime() time.Duration {
@@ -72,7 +72,7 @@ func (r Ece408JobResponse) Anonymize() Ece408JobResponse {
 }
 
 func (Ece408JobResponse) TableName() string {
-	return "rankings"
+	return "ece408_rankings"
 }
 
 type Ece408JobResponseCollection struct {

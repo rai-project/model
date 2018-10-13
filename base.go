@@ -4,6 +4,7 @@ import (
 	"time"
 )
 
+// ffjson: nodecoder
 type Base struct {
 	ID        string     `json:"id" gorm:"primary_key" toml:"id,omitempty"`
 	CreatedAt time.Time  `json:"created_at" toml:"created_at,omitempty"`
