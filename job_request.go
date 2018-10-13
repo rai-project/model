@@ -6,7 +6,7 @@ import (
 	"github.com/rai-project/config"
 )
 
-// ffjson
+// easyjson:json
 type JobRequest struct {
 	Base
 	ClientVersion      config.VersionInfo `json:"client_version"`
@@ -15,10 +15,10 @@ type JobRequest struct {
 	BuildSpecification BuildSpecification `json:"build_specification"`
 }
 
-// ffjson
+// easyjson:json
 type BuildCommands []string
 
-// ffjson
+// easyjson:json
 type Push struct {
 	Push        bool        `json:"push" yaml:"push"`
 	ImageName   string      `json:"image_name" yaml:"image_name"`
@@ -26,7 +26,7 @@ type Push struct {
 	Credentials Credentials `json:"credentials" yaml:"credentials"`
 }
 
-// ffjson
+// easyjson:json
 type BuildImageSpecification struct {
 	ImageName  string `json:"image_name" yaml:"image_name"`
 	Dockerfile string `json:"dockerfile" yaml:"dockerfile"`
@@ -34,45 +34,44 @@ type BuildImageSpecification struct {
 	NoCache    bool   `json:"no_cache" yaml:"no_cache"`
 }
 
-// ffjson
+// easyjson:json
 type RAIBuildSpecification struct {
 	Version        string `json:"version" yaml:"version"`
 	ContainerImage string `json:"image" yaml:"image"`
 }
 
-// ffjson
+// easyjson:json
 type CommandsBuildSpecification struct {
 	BuildImage *BuildImageSpecification `json:"build_image,omitempty" yaml:"build_image,omitempty"`
 	Build      BuildCommands            `json:"build" yaml:"build"`
 }
 
-// ffjson
+// easyjson:json
 type BuildSpecification struct {
 	RAI       RAIBuildSpecification      `json:"rai" yaml:"rai"`
 	Resources Resources                  `json:"resources" yaml:"resources"`
 	Commands  CommandsBuildSpecification `json:"commands" yaml:"commands"`
 }
 
-// ffjson
+// easyjson:json
 type Resources struct {
 	CPU     CPUResources  `json:"cpu" yaml:"cpu"`
 	GPU     *GPUResources `json:"gpu" yaml:"gpu"`
 	Network bool          `json:"network" yaml:"network"`
 }
 
-// ffjson
+// easyjson:json
 type CPUResources struct {
 	Architecture string `json:"architecture" yaml:"architecture"`
 }
 
-// ffjson
+// easyjson:json
 type GPUResources struct {
 	Architecture string `json:"architecture" yaml:"architecture"`
 	Count        int    `json:"count" yaml:"count"`
 	Memory       int64  `json:"memory" yaml:"memory"`
 }
 
-// ffjson
 type ResponseKind string
 
 const (

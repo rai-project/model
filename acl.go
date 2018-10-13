@@ -2,7 +2,7 @@ package model
 
 import "time"
 
-// ffjson
+// easyjson:json
 type ACL struct {
 	MaxRuntimeLimit time.Duration
 	MaxStorageLimit uint64

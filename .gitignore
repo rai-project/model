@@ -59,4 +59,4 @@ key.pem
 /build/bin/
 
 
-ffjson-inception*
+easyjson:json-inception*
