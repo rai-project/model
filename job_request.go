@@ -9,10 +9,10 @@ import (
 // easyjson:json
 type JobRequest struct {
 	Base
-	ClientVersion      config.VersionInfo `json:"client_version"`
+	ClientVersion      config.VersionInfo `json:"client_version" validate:"required"`
 	UploadKey          string             `json:"upload_key"`
-	User               User               `json:"user" gorm:"ForeignKey:UserID;AssociationForeignKey:Refer"`
-	BuildSpecification BuildSpecification `json:"build_specification"`
+	User               User               `json:"user" validate:"required,dive,required" gorm:"ForeignKey:UserID;AssociationForeignKey:Refer"`
+	BuildSpecification BuildSpecification `json:"build_specification" validate:"required,dive,required"`
 }
 
 // easyjson:json
@@ -48,28 +48,28 @@ type CommandsBuildSpecification struct {
 
 // easyjson:json
 type BuildSpecification struct {
-	RAI       RAIBuildSpecification      `json:"rai" yaml:"rai"`
-	Resources Resources                  `json:"resources" yaml:"resources"`
-	Commands  CommandsBuildSpecification `json:"commands" yaml:"commands"`
+	RAI       RAIBuildSpecification      `json:"rai" yaml:"rai" validate:"required"`
+	Resources Resources                  `json:"resources" yaml:"resources" validate:"required"`
+	Commands  CommandsBuildSpecification `json:"commands" yaml:"commands" validate:"required"`
 }
 
 // easyjson:json
 type Resources struct {
-	CPU     CPUResources  `json:"cpu" yaml:"cpu"`
+	CPU     CPUResources  `json:"cpu" yaml:"cpu" validate:"required,dive,required"`
 	GPU     *GPUResources `json:"gpu" yaml:"gpu"`
 	Network bool          `json:"network" yaml:"network"`
 }
 
 // easyjson:json
 type CPUResources struct {
-	Architecture string `json:"architecture" yaml:"architecture"`
+	Architecture string `json:"architecture" yaml:"architecture" validate:"required"`
 }
 
 // easyjson:json
 type GPUResources struct {
-	Architecture string `json:"architecture" yaml:"architecture"`
-	Count        int    `json:"count" yaml:"count"`
-	Memory       int64  `json:"memory" yaml:"memory"`
+	Architecture string `json:"architecture" yaml:"architecture" validate:"required"`
+	Count        int    `json:"count" yaml:"count" validate:"required"`
+	Memory       int64  `json:"memory" yaml:"memory" validate:"required"`
 }
 
 type ResponseKind string

@@ -13,22 +13,22 @@ import (
 
 // Ece408Inference is an inference record for ECE 408 Spring 2018
 type Ece408Inference struct {
-	Model              string
-	Correctness        float64
-	OpRuntimes         []time.Duration // run times reported by the layer invocations
-	UserFullRuntime    time.Duration   // user from /usr/bin/time
-	SystemFullRuntime  time.Duration   // system from /usr/bin/time
-	ElapsedFullRuntime time.Duration   // elapsed from /usr/bin/time
+	Model              string          `json:"model,omitempty"`
+	Correctness        float64         `json:"correctness,omitempty"`
+	OpRuntimes         []time.Duration `json:"op_runtimes,omitempty"`          // run times reported by the layer invocations
+	UserFullRuntime    time.Duration   `json:"user_full_runtime,omitempty"`    // user from /usr/bin/time
+	SystemFullRuntime  time.Duration   `json:"system_full_runtime,omitempty"`  // system from /usr/bin/time
+	ElapsedFullRuntime time.Duration   `json:"elapsed_full_runtime,omitempty"` // elapsed from /usr/bin/time
 }
 
 // Ranking holds info used to track team rankings
 type ECE408Ranking struct {
-	CreatedAt     time.Time `json:"created_at"  bson:"created_at"`
-	Username      string
-	Teamname      string
-	ProjectURL    string // where the file was uploaded
-	IsSubmission  bool   `bson:"is_submission"`  // is a final submission
-	SubmissionTag string `bson:"submission_tag"` // more info about the submission
+	CreatedAt     time.Time `json:"created_at,omitempty" bson:"created_at"`
+	Username      string    `json:"username,omitempty"`
+	Teamname      string    `json:"teamname,omitempty"`
+	ProjectURL    string    `json:"project_url,omitempty"`                          // where the file was uploaded
+	IsSubmission  bool      `bson:"is_submission" json:"is_submission,omitempty"`   // is a final submission
+	SubmissionTag string    `bson:"submission_tag" json:"submission_tag,omitempty"` // more info about the submission
 }
 
 type Ece408JobResponse struct {
@@ -116,8 +116,7 @@ func FilterNonZeroTimes(js Ece408JobResponses) Ece408JobResponses {
 	for _, j := range js {
 		inferenceGood := true
 		for _, i := range j.Inferences {
-			var TotalOpRunTime int64
-			TotalOpRunTime = 0
+			TotalOpRunTime := int64(0)
 			for _, h := range i.OpRuntimes {
 				TotalOpRunTime += int64(h)
 			}
