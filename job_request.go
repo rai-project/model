@@ -20,10 +20,10 @@ type BuildCommands []string
 
 // easyjson:json
 type Push struct {
-	Push        bool        `json:"push" yaml:"push"`
-	ImageName   string      `json:"image_name" yaml:"image_name"`
-	Registry    string      `json:"registry" yaml:"registry"`
-	Credentials Credentials `json:"credentials" yaml:"credentials"`
+	Push        bool                 `json:"push" yaml:"push"`
+	ImageName   string               `json:"image_name" yaml:"image_name"`
+	Registry    string               `json:"registry" yaml:"registry"`
+	Credentials DockerHubCredentials `json:"credentials" yaml:"credentials"`
 }
 
 // easyjson:json

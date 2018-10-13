@@ -70,7 +70,7 @@ func easyjsonC80ae7adDecodeGithubComRaiProjectModel(in *jlexer.Lexer, out *User)
         out.DockerHub = nil
       } else {
         if out.DockerHub == nil {
-          out.DockerHub = new(Credentials)
+          out.DockerHub = new(DockerHubCredentials)
         }
         (*out.DockerHub).UnmarshalEasyJSON(in)
       }
@@ -706,6 +706,32 @@ func easyjsonC80ae7adDecodeGithubComRaiProjectModel5(in *jlexer.Lexer, out *JobR
       } else {
         out.Body = in.Bytes()
       }
+    case "metadata":
+      if in.IsNull() {
+        in.Skip()
+      } else {
+        in.Delim('{')
+        if !in.IsDelim('}') {
+        out.Metadata = make(map[string]interface {})
+        } else {
+        out.Metadata = nil
+        }
+        for !in.IsDelim('}') {
+          key := string(in.String())
+          in.WantColon()
+          var v2 interface {}
+          if m, ok := v2.(easyjson.Unmarshaler); ok {
+          m.UnmarshalEasyJSON(in)
+          } else if m, ok := v2.(json.Unmarshaler); ok {
+          _ = m.UnmarshalJSON(in.Raw())
+          } else {
+            v2 = in.Interface()
+          }
+          (out.Metadata)[key] = v2
+          in.WantComma()
+        }
+        in.Delim('}')
+      }
     case "created_at":
       if data := in.Raw(); in.Ok() {
         in.AddError( (out.CreatedAt).UnmarshalJSON(data) )
@@ -757,6 +783,32 @@ func easyjsonC80ae7adEncodeGithubComRaiProjectModel5(out *jwriter.Writer, in Job
       out.RawString(prefix)
     }
     out.Base64Bytes(in.Body)
+  }
+  if len(in.Metadata) != 0 {
+    const prefix string = ",\"metadata\":"
+    if first {
+      first = false
+      out.RawString(prefix[1:])
+    } else {
+      out.RawString(prefix)
+    }
+    {
+      out.RawByte('{')
+      v5First := true
+      for v5Name, v5Value := range in.Metadata {
+        if v5First { v5First = false } else { out.RawByte(',') }
+        out.String(string(v5Name))
+        out.RawByte(':')
+        if m, ok := v5Value.(easyjson.Marshaler); ok {
+          m.MarshalEasyJSON(out)
+        } else if m, ok := v5Value.(json.Marshaler); ok {
+          out.Raw(m.MarshalJSON())
+        } else {
+          out.Raw(json.Marshal(v5Value))
+        }
+      }
+      out.RawByte('}')
+    }
   }
   {
     const prefix string = ",\"created_at\":"
@@ -1169,7 +1221,7 @@ func (v *GPUResources) UnmarshalJSON(data []byte) error {
 func (v *GPUResources) UnmarshalEasyJSON(l *jlexer.Lexer) {
   easyjsonC80ae7adDecodeGithubComRaiProjectModel7(l, v)
 }
-func easyjsonC80ae7adDecodeGithubComRaiProjectModel8(in *jlexer.Lexer, out *Credentials) {
+func easyjsonC80ae7adDecodeGithubComRaiProjectModel8(in *jlexer.Lexer, out *DockerHubCredentials) {
   isTopLevel := in.IsStart()
   if in.IsNull() {
     if isTopLevel {
@@ -1206,7 +1258,7 @@ func easyjsonC80ae7adDecodeGithubComRaiProjectModel8(in *jlexer.Lexer, out *Cred
     in.Consumed()
   }
 }
-func easyjsonC80ae7adEncodeGithubComRaiProjectModel8(out *jwriter.Writer, in Credentials) {
+func easyjsonC80ae7adEncodeGithubComRaiProjectModel8(out *jwriter.Writer, in DockerHubCredentials) {
   out.RawByte('{')
   first := true
   _ = first
@@ -1233,23 +1285,23 @@ func easyjsonC80ae7adEncodeGithubComRaiProjectModel8(out *jwriter.Writer, in Cre
   out.RawByte('}')
 }
 // MarshalJSON supports json.Marshaler interface
-func (v Credentials) MarshalJSON() ([]byte, error) {
+func (v DockerHubCredentials) MarshalJSON() ([]byte, error) {
   w := jwriter.Writer{}
   easyjsonC80ae7adEncodeGithubComRaiProjectModel8(&w, v)
   return w.Buffer.BuildBytes(), w.Error
 }
 // MarshalEasyJSON supports easyjson.Marshaler interface
-func (v Credentials) MarshalEasyJSON(w *jwriter.Writer) {
+func (v DockerHubCredentials) MarshalEasyJSON(w *jwriter.Writer) {
   easyjsonC80ae7adEncodeGithubComRaiProjectModel8(w, v)
 }
 // UnmarshalJSON supports json.Unmarshaler interface
-func (v *Credentials) UnmarshalJSON(data []byte) error {
+func (v *DockerHubCredentials) UnmarshalJSON(data []byte) error {
   r := jlexer.Lexer{Data: data}
   easyjsonC80ae7adDecodeGithubComRaiProjectModel8(&r, v)
   return r.Error()
 }
 // UnmarshalEasyJSON supports easyjson.Unmarshaler interface
-func (v *Credentials) UnmarshalEasyJSON(l *jlexer.Lexer) {
+func (v *DockerHubCredentials) UnmarshalEasyJSON(l *jlexer.Lexer) {
   easyjsonC80ae7adDecodeGithubComRaiProjectModel8(l, v)
 }
 func easyjsonC80ae7adDecodeGithubComRaiProjectModel9(in *jlexer.Lexer, out *CommandsBuildSpecification) {
@@ -1645,9 +1697,9 @@ func easyjsonC80ae7adDecodeGithubComRaiProjectModel13(in *jlexer.Lexer, out *Bui
       *out = (*out)[:0]
     }
     for !in.IsDelim(']') {
-      var v4 string
-      v4 = string(in.String())
-      *out = append(*out, v4)
+      var v6 string
+      v6 = string(in.String())
+      *out = append(*out, v6)
       in.WantComma()
     }
     in.Delim(']')
@@ -1661,11 +1713,11 @@ func easyjsonC80ae7adEncodeGithubComRaiProjectModel13(out *jwriter.Writer, in Bu
     out.RawString("null")
   } else {
     out.RawByte('[')
-    for v5, v6 := range in {
-      if v5 > 0 {
+    for v7, v8 := range in {
+      if v7 > 0 {
         out.RawByte(',')
       }
-      out.String(string(v6))
+      out.String(string(v8))
     }
     out.RawByte(']')
   }
