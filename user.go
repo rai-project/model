@@ -1,5 +1,9 @@
 package model
 
+import (
+	"github.com/rai-project/acl"
+)
+
 // easyjson:json
 type User struct {
 	Base        `toml:"-" yaml:"-" validate:"required,dive,required"`
@@ -13,8 +17,7 @@ type User struct {
 	Password    string                `json:"password" yaml:"-" toml:"-"`
 	Team        *Team                 `json:"team" gorm:"ForeignKey:TeamID;AssociationForeignKey:Refer" toml:"-"`
 	DockerHub   *DockerHubCredentials `json:"dockerhub,omitempty" yaml:"dockerhub,omitempty" toml:"dockerhub,omitempty"`
-	Role        Role                  `json:"role" yaml:"role" validate:"required"`
-	ACL         ACL                   `json:"acl,omitempty" yaml:"acl"`
+	Role        acl.Role              `json:"role" yaml:"role" validate:"required"`
 }
 
 func (User) TableName() string {
