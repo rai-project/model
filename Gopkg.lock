@@ -64,6 +64,14 @@
   version = "v1.1.1"
 
 [[projects]]
+  digest = "0:"
+  name = "github.com/dustin/go-humanize"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "9f541cc9db5d55bce703bd99987c9d5cb8eea45e"
+  version = "v1.0.0"
+
+[[projects]]
   branch = "master"
   digest = "1:9a023ac8c30a6871d3fc94c9c0b5a0639ede096c351fd6cdcd7268fe9cb95af2"
   name = "github.com/facebookgo/stack"
@@ -225,6 +233,14 @@
   pruneopts = "UT"
   revision = "792786c7400a136282c1664665ae0a8db921c6c2"
   version = "v1.0.0"
+
+[[projects]]
+  branch = "master"
+  digest = "0:"
+  name = "github.com/rai-project/acl"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "923986ee52c5bc4602763a0adc9b574136787887"
 
 [[projects]]
   branch = "master"
@@ -461,8 +477,9 @@
     "github.com/mailru/easyjson",
     "github.com/mailru/easyjson/jlexer",
     "github.com/mailru/easyjson/jwriter",
+    "github.com/pkg/errors",
+    "github.com/rai-project/acl",
     "github.com/rai-project/config",
-    "github.com/rai-project/database",
     "github.com/rai-project/database/mongodb",
     "github.com/rai-project/logger",
     "github.com/sirupsen/logrus",
