@@ -1,4 +1,4 @@
-# README [![Build Status](https://travis-ci.org/rai-project/model.svg?branch=master)](https://travis-ci.org/rai-project/model)
+# README [![Build Status](https://travis-ci.org/rai-project/model.svg?branch=master)](https://travis-ci.org/rai-project/model) [![stability-experimental](https://img.shields.io/badge/stability-experimental-orange.svg)](https://github.com/emersion/stability-badges#experimental)
 
 ## Developing
 
