@@ -2,10 +2,12 @@ package model
 
 import (
 	"github.com/rai-project/acl"
+	"gopkg.in/mgo.v2/bson"
 )
 
 // easyjson:json
 type User struct {
+	ID          bson.ObjectId `json:"_id" bson:"_id" gorm:"primary_key" toml:"id,omitempty" validate:"required"`
 	Base        `toml:"-" yaml:"-" validate:"required,dive,required"`
 	Firstname   string                `json:"firstname" yaml:"firstname,omitempty" toml:"firstname,omitempty" validate:"required"`
 	Lastname    string                `json:"lastname" yaml:"lastname,omitempty" toml:"lastname,omitempty" validate:"required"`

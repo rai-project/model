@@ -39,6 +39,10 @@ func easyjsonC80ae7adDecodeGithubComRaiProjectModel(in *jlexer.Lexer, out *User)
        continue
     }
     switch key {
+    case "_id":
+      if data := in.Raw(); in.Ok() {
+        in.AddError( (out.ID).UnmarshalJSON(data) )
+      }
     case "firstname":
       out.Firstname = string(in.String())
     case "lastname":
@@ -77,10 +81,6 @@ func easyjsonC80ae7adDecodeGithubComRaiProjectModel(in *jlexer.Lexer, out *User)
       }
     case "role":
       out.Role = acl.Role(in.String())
-    case "id":
-      if data := in.Raw(); in.Ok() {
-        in.AddError( (out.ID).UnmarshalJSON(data) )
-      }
     case "created_at":
       if data := in.Raw(); in.Ok() {
         in.AddError( (out.CreatedAt).UnmarshalJSON(data) )
@@ -119,6 +119,16 @@ func easyjsonC80ae7adEncodeGithubComRaiProjectModel(out *jwriter.Writer, in User
   out.RawByte('{')
   first := true
   _ = first
+  {
+    const prefix string = ",\"_id\":"
+    if first {
+      first = false
+      out.RawString(prefix[1:])
+    } else {
+      out.RawString(prefix)
+    }
+    out.Raw( (in.ID).MarshalJSON() )
+  }
   {
     const prefix string = ",\"firstname\":"
     if first {
@@ -232,16 +242,6 @@ func easyjsonC80ae7adEncodeGithubComRaiProjectModel(out *jwriter.Writer, in User
       out.RawString(prefix)
     }
     out.String(string(in.Role))
-  }
-  {
-    const prefix string = ",\"id\":"
-    if first {
-      first = false
-      out.RawString(prefix[1:])
-    } else {
-      out.RawString(prefix)
-    }
-    out.Raw( (in.ID).MarshalJSON() )
   }
   {
     const prefix string = ",\"created_at\":"
@@ -1184,6 +1184,10 @@ func easyjsonC80ae7adDecodeGithubComRaiProjectModel10(in *jlexer.Lexer, out *Job
        continue
     }
     switch key {
+    case "_id":
+      if data := in.Raw(); in.Ok() {
+        in.AddError( (out.ID).UnmarshalJSON(data) )
+      }
     case "client_version":
       easyjsonC80ae7adDecodeGithubComRaiProjectConfig(in, &out.ClientVersion)
     case "upload_key":
@@ -1192,10 +1196,6 @@ func easyjsonC80ae7adDecodeGithubComRaiProjectModel10(in *jlexer.Lexer, out *Job
       (out.User).UnmarshalEasyJSON(in)
     case "build_specification":
       (out.BuildSpecification).UnmarshalEasyJSON(in)
-    case "id":
-      if data := in.Raw(); in.Ok() {
-        in.AddError( (out.ID).UnmarshalJSON(data) )
-      }
     case "created_at":
       if data := in.Raw(); in.Ok() {
         in.AddError( (out.CreatedAt).UnmarshalJSON(data) )
@@ -1235,6 +1235,16 @@ func easyjsonC80ae7adEncodeGithubComRaiProjectModel10(out *jwriter.Writer, in Jo
   first := true
   _ = first
   {
+    const prefix string = ",\"_id\":"
+    if first {
+      first = false
+      out.RawString(prefix[1:])
+    } else {
+      out.RawString(prefix)
+    }
+    out.Raw( (in.ID).MarshalJSON() )
+  }
+  {
     const prefix string = ",\"client_version\":"
     if first {
       first = false
@@ -1273,16 +1283,6 @@ func easyjsonC80ae7adEncodeGithubComRaiProjectModel10(out *jwriter.Writer, in Jo
       out.RawString(prefix)
     }
     (in.BuildSpecification).MarshalEasyJSON(out)
-  }
-  {
-    const prefix string = ",\"id\":"
-    if first {
-      first = false
-      out.RawString(prefix[1:])
-    } else {
-      out.RawString(prefix)
-    }
-    out.Raw( (in.ID).MarshalJSON() )
   }
   {
     const prefix string = ",\"created_at\":"
@@ -2148,10 +2148,6 @@ func easyjsonC80ae7adDecodeGithubComRaiProjectModel19(in *jlexer.Lexer, out *Bas
        continue
     }
     switch key {
-    case "id":
-      if data := in.Raw(); in.Ok() {
-        in.AddError( (out.ID).UnmarshalJSON(data) )
-      }
     case "created_at":
       if data := in.Raw(); in.Ok() {
         in.AddError( (out.CreatedAt).UnmarshalJSON(data) )
@@ -2190,16 +2186,6 @@ func easyjsonC80ae7adEncodeGithubComRaiProjectModel19(out *jwriter.Writer, in Ba
   out.RawByte('{')
   first := true
   _ = first
-  {
-    const prefix string = ",\"id\":"
-    if first {
-      first = false
-      out.RawString(prefix[1:])
-    } else {
-      out.RawString(prefix)
-    }
-    out.Raw( (in.ID).MarshalJSON() )
-  }
   {
     const prefix string = ",\"created_at\":"
     if first {
